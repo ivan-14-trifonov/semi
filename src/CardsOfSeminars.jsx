@@ -39,6 +39,7 @@ function CardsOfSeminars() {
     <div>
       {Array(seminars.length).fill().map((_, i) =>
         <Card variant="outlined" className="card" name={seminars[i][0]}>
+          <img className="card__photo" src={seminars[i].photo} alt="Пример изображения" />
           <p className="card__title">{seminars[i].title}</p>
           <p className="card__description">{seminars[i].description}</p>
           <p className="card__time">{seminars[i].date} {seminars[i].time}</p>
