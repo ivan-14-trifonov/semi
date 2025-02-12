@@ -4,11 +4,19 @@ import { Card } from "@mui/material";
 
 const SERVER_URL = 'http://localhost:3000/seminars';
 
+// Получение данных о семинарах
 async function getSeminars(query, endpoint = SERVER_URL) {
   try {
+    // проверяем, есть ли параметры
     query ? (query = `?${query}`) : (query = '');
+
+    // асинхронно получаем данные
     const response = await fetch(`${endpoint}${query}`);
+
+    // генерация ошибки
     if (!response.ok) throw new Error(response.statusText);
+
+    // ответ
     const json = await response.json();
     return json;
   } catch (err) {
@@ -17,10 +25,15 @@ async function getSeminars(query, endpoint = SERVER_URL) {
   }
 }
 
+// Отображение карточек семинаров
 function CardsOfSeminars() {
+  // Данные о семинарах
   const [seminars, setSeminars] = useState([]);
+
+  // Состояние загрузки
   const [loading, setLoading] = useState(true);
 
+  // Асинхронно получаем данные
   useEffect(() => {
     const fetchData = async () => {
       const data = await getSeminars();
@@ -31,10 +44,12 @@ function CardsOfSeminars() {
     fetchData();
   }, []);
 
+  // Если данные ещё не загрузились
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
 
+  // Возвращаем карточки семинаров
   return (
     <div>
       {Array(seminars.length).fill().map((_, i) =>
