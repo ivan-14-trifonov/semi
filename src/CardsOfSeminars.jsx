@@ -31,18 +31,43 @@ async function getSeminars(query, endpoint = SERVER_URL) {
 async function deleteSeminar(id, point = SERVER_URL) {
   try {
     // Выполняем удаление
-    const response = fetch(`${point}/${id}`, {
+    const response = await fetch(`${point}/${id}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
-    // генерация ошибки
-    if (!response.ok) throw new Error(response.statusText);
-
-    return true;
-  } catch (err) {
+    if (response.ok) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
     return false;
   }
 }
+
+// Изменение данных о семинаре
+async function updateSeminar(id, updatedData, point = SERVER_URL) {
+  try {
+    const response = await fetch(`${point}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (response.ok) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+};
 
 // Модальное окно редактирования семинара
 const EditSeminarModal = ({ seminar, isOpen, onClose, onSave }) => {
@@ -152,8 +177,16 @@ function CardsOfSeminars() {
     setIndexSeminarEdit(false);
   };
 
+  // Изменение семинара
   const handleSave = (updatedSeminar) => {
-    // onEdit(updatedSeminar);
+    const res = updateSeminar(updatedSeminar.id, updatedSeminar);
+    if (res) {
+      alert('Запись успешно обновлена');
+      setFlag(!flag);
+    }
+    else {
+      alert('Ошибка при обновлении записи');
+    };
   };
 
   // Данные о семинарах
