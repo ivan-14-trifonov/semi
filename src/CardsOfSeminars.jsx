@@ -35,8 +35,6 @@ async function deleteSeminar(id, point = SERVER_URL) {
       method: 'DELETE',
     });
 
-    alert(JSON.stringify(response));
-
     // генерация ошибки
     if (!response.ok) throw new Error(response.statusText);
 
@@ -54,6 +52,9 @@ function CardsOfSeminars() {
   // Состояние загрузки
   const [loading, setLoading] = useState(true);
 
+  // Флаг изменения данных
+  const [flag, setFlag] = useState(true);
+
   // Асинхронно получаем данные
   useEffect(() => {
     const fetchData = async () => {
@@ -63,15 +64,16 @@ function CardsOfSeminars() {
     };
 
     fetchData();
-  }, []);
+  }, [flag]);
 
-  const onDelete = event => {
+  const onDelete = (event) => {
     const seminarName = event.currentTarget.getAttribute("value");
     const seminarId = event.currentTarget.getAttribute("id");
     const res = window.confirm(`Вы действительно хотите удалить запись о семинаре "${seminarName}"?`);
     if (res) {
       if (deleteSeminar(seminarId)) {
         alert("Запись успешно удалена.");
+        setFlag(!flag);
       } else {
         alert("Возникла ошибка удаления.");
       }
