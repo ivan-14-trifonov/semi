@@ -1,0 +1,26 @@
+.card {
+  font-size: 1em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  padding: 0.5em;
+  margin: 0.5em 0 0;
+}
+
+.card__title {
+  margin: 0;
+}
+
+.card__description {
+  font-size: 0.8em;
+  color: #696969;
+  margin: 0.25em 0 0;
+}
+
+.card__time {
+  font-size: 0.8em;
+  color: #FFF;
+  margin: 0.5em 0.25em 0.25em;
+  border-radius: 0.5em;
+  padding: 0.25em 0.5em;
+  display: inline-block;
+  background-color: #1976D2;
+}
