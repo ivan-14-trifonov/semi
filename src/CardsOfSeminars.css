@@ -28,3 +28,18 @@
   display: inline-block;
   background-color: #1976D2;
 }
+
+.card__panel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card__edit {
+  margin: 0;
+}
+
+.card__button {
+  max-width: 1.5em;
+  margin: 0 0.5em;
+  cursor: pointer;
+}

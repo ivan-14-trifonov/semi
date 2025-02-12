@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './CardsOfSeminars.css'; 
 import { Card } from "@mui/material";
+import edit from './images/edit.png';
+import del from './images/delete.png';
 
 const SERVER_URL = 'http://localhost:3000/seminars';
 
@@ -57,7 +59,13 @@ function CardsOfSeminars() {
           <img className="card__photo" src={seminars[i].photo} alt="Пример изображения" />
           <p className="card__title">{seminars[i].title}</p>
           <p className="card__description">{seminars[i].description}</p>
-          <p className="card__time">{seminars[i].date} {seminars[i].time}</p>
+          <div className="card__panel">
+            <p className="card__time">{seminars[i].date} {seminars[i].time}</p>
+            <p className="card__edit">
+              <img className="card__button" src={edit} alt="Изменить" />
+              <img className="card__button" src={del} alt="Удалить" />
+            </p>
+          </div>
         </Card>
       )}
     </div>
