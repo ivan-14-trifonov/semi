@@ -27,6 +27,25 @@ async function getSeminars(query, endpoint = SERVER_URL) {
   }
 }
 
+// Удаление семинара
+async function deleteSeminar(id, point = SERVER_URL) {
+  try {
+    // Выполняем удаление
+    const response = fetch(`${point}/${id}`, {
+      method: 'DELETE',
+    });
+
+    alert(JSON.stringify(response));
+
+    // генерация ошибки
+    if (!response.ok) throw new Error(response.statusText);
+
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 // Отображение карточек семинаров
 function CardsOfSeminars() {
   // Данные о семинарах
@@ -46,6 +65,20 @@ function CardsOfSeminars() {
     fetchData();
   }, []);
 
+  const onDelete = event => {
+    const seminarName = event.currentTarget.getAttribute("value");
+    const seminarId = event.currentTarget.getAttribute("id");
+    const res = window.confirm(`Вы действительно хотите удалить запись о семинаре "${seminarName}"?`);
+    if (res) {
+      if (deleteSeminar(seminarId)) {
+        alert("Запись успешно удалена.");
+      } else {
+        alert("Возникла ошибка удаления.");
+      }
+
+    }
+  }
+
   // Если данные ещё не загрузились
   if (loading) {
     return <div className="loading">Loading...</div>;
@@ -55,15 +88,28 @@ function CardsOfSeminars() {
   return (
     <div>
       {Array(seminars.length).fill().map((_, i) =>
-        <Card variant="outlined" className="card" name={seminars[i][0]}>
-          <img className="card__photo" src={seminars[i].photo} alt="Пример изображения" />
+        <Card variant="outlined" className="card">
+          <img className="card__photo" src={seminars[i].photo} alt="Картинка семинара" />
           <p className="card__title">{seminars[i].title}</p>
           <p className="card__description">{seminars[i].description}</p>
           <div className="card__panel">
             <p className="card__time">{seminars[i].date} {seminars[i].time}</p>
             <p className="card__edit">
-              <img className="card__button" src={edit} alt="Изменить" />
-              <img className="card__button" src={del} alt="Удалить" />
+              <img
+                value={seminars[i].title}
+                id={seminars[i].id}
+                className="card__button"
+                src={edit}
+                alt="Изменить"
+              />
+              <img
+                value={seminars[i].title}
+                id={seminars[i].id}
+                onClick={onDelete}
+                className="card__button"
+                src={del}
+                alt="Удалить"
+              />
             </p>
           </div>
         </Card>
