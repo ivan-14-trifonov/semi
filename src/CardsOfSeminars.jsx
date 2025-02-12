@@ -44,8 +44,28 @@ async function deleteSeminar(id, point = SERVER_URL) {
   }
 }
 
+// Модальное окно
+const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null; // Если модальное окно закрыто, не рендерим его
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <button className="modal-close" onClick={onClose}>
+          &times;
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
+
 // Отображение карточек семинаров
 function CardsOfSeminars() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   // Данные о семинарах
   const [seminars, setSeminars] = useState([]);
 
@@ -66,7 +86,8 @@ function CardsOfSeminars() {
     fetchData();
   }, [flag]);
 
-  const onDelete = (event) => {
+  // Удаление
+  const onDelete = event => {
     const seminarName = event.currentTarget.getAttribute("value");
     const seminarId = event.currentTarget.getAttribute("id");
     const res = window.confirm(`Вы действительно хотите удалить запись о семинаре "${seminarName}"?`);
@@ -77,7 +98,6 @@ function CardsOfSeminars() {
       } else {
         alert("Возникла ошибка удаления.");
       }
-
     }
   }
 
@@ -89,6 +109,9 @@ function CardsOfSeminars() {
   // Возвращаем карточки семинаров
   return (
     <div>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        
+      </Modal>
       {Array(seminars.length).fill().map((_, i) =>
         <Card variant="outlined" className="card">
           <img className="card__photo" src={seminars[i].photo} alt="Картинка семинара" />
@@ -100,6 +123,7 @@ function CardsOfSeminars() {
               <img
                 value={seminars[i].title}
                 id={seminars[i].id}
+                onClick={openModal}
                 className="card__button"
                 src={edit}
                 alt="Изменить"
