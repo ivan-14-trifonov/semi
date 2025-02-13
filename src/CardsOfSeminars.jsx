@@ -28,7 +28,7 @@ async function getSeminars(query, endpoint = SERVER_URL) {
 }
 
 // Удаление семинара
-async function deleteSeminar(id, point = SERVER_URL) {
+const deleteSeminar = async (id, point = SERVER_URL) => {
   try {
     // Выполняем удаление
     const response = await fetch(`${point}/${id}`, {
@@ -209,20 +209,29 @@ function CardsOfSeminars() {
     fetchData();
   }, [flag]);
 
+  // Ответ
+  const [response, setResponse] = useState(null);
+
   // Удаление
-  const onDelete = event => {
+  const onDelete = async (event) => {
     const seminarName = event.currentTarget.getAttribute("value");
     const seminarId = event.currentTarget.getAttribute("id");
-    const res = window.confirm(`Вы действительно хотите удалить запись о семинаре "${seminarName}"?`);
-    if (res) {
-      if (deleteSeminar(seminarId)) {
-        alert("Запись успешно удалена.");
-        setFlag(!flag);
-      } else {
-        alert("Возникла ошибка удаления.");
+    const conf = window.confirm(`Вы действительно хотите удалить запись о семинаре "${seminarName}"?`);
+    
+    try {
+      if (conf) {
+        const res = await deleteSeminar(seminarId);
+        if (res) {
+          alert("Запись успешно удалена.");
+          setFlag(!flag);
+        } else {
+          alert("Возникла ошибка удаления.");
+        }
       }
+    } catch (error) {
+      alert("Возникла ошибка удаления.");
     }
-  }
+  };
 
   // Если данные ещё не загрузились
   if (loading) {
